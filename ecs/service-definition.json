@@ -1,0 +1,21 @@
+{
+    "serviceName": "misp-service",
+    "taskDefinition": "misp-task",
+    "desiredCount": 1,
+    "launchType": "FARGATE",
+    "networkConfiguration": {
+      "awsvpcConfiguration": {
+        "subnets": ["your-public-subnet-id"],
+        "securityGroups": ["your-ecs-security-group-id"],
+        "assignPublicIp": "ENABLED"
+      }
+    },
+    "loadBalancers": [
+      {
+        "targetGroupArn": "your-alb-target-group-arn",
+        "containerName": "misp-container",
+        "containerPort": 80
+      }
+    ]
+  }
+  

@@ -1,0 +1,39 @@
+# name: Deploy MISP to AWS ECS
+
+# on:
+#   push:
+#     branches:
+#       - main  # Trigger on push to the 'main' branch
+
+# jobs:
+#   build-and-deploy:
+#     name: Build and Deploy to ECS
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     # Step 1: Checkout the code
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+
+#     # Step 2: Log in to Amazon ECR
+#     - name: Log in to Amazon ECR
+#       id: login-ecr
+#       uses: aws-actions/amazon-ecr-login@v1
+
+#     # Step 3: Build and Push Docker Image
+#     - name: Build, tag, and push image to ECR
+#       env:
+#         AWS_REGION: ${{ secrets.AWS_REGION }}
+#         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+#       run: |
+#         docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/misp:${{ github.sha }} .
+#         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/misp:${{ github.sha }}
+
+#     # Step 4: Update ECS Service
+#     - name: Deploy to ECS
+#       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#       with:
+#         cluster: misp-cluster
+#         service: misp-service
+#         task-definition: ecs/task-definition.json
+#         wait-for-service-stability: true

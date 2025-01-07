@@ -1,0 +1,35 @@
+# Terraform files
+*.tfstate
+*.tfstate.backup
+.terraform/
+crash.log
+*.tfvars
+terraform.tfvars
+
+# Docker files
+docker-compose.override.yml
+*.env
+.misp.env
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# AWS credentials (if accidentally created locally)
+.aws/
+
+# Node and Python (if used for development)
+node_modules/
+__pycache__/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.idea/
+.vscode/
+*.iml
+
+# Git-specific files
+.git/
