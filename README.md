@@ -41,6 +41,9 @@ misp-on-aws/
 │   └── service-definition.json    # ECS service definition (optional)
 ├── .github/workflows/             # CI/CD pipeline
 │   └── deploy-misp.yml            # GitHub Actions workflow for ECS deployment
+│   └── misp-architecture.drawio   # Editable architecture diagram
+│   ├── DEPLOYMENT.md              # Step-by-step deployment guide
+│   └── TROUBLESHOOTING.md         # Common issues and fixes
 ├── terraform.tfvars               # Terraform input variables
 ├── .gitignore                     # Prevent sensitive files from being committed
 └── README.md                      # Project overview (this file)
@@ -59,6 +62,43 @@ misp-on-aws/
 ---
 
 ## **Setup and Deployment**
+
+### **Steps to Make It Production Ready**
+
+To prepare this deployment for production, follow these additional steps:
+
+1. **Enable HTTPS with a Valid SSL Certificate**:
+   - Use AWS Certificate Manager (ACM) to create a certificate for your domain.
+   - Attach the certificate to your Application Load Balancer (ALB).
+
+2. **Set Up Auto-Scaling**:
+   - Configure ECS service auto-scaling based on CPU or memory usage.
+   - Enable RDS auto-scaling for high availability.
+
+3. **Use AWS Secrets Manager**:
+   - Store sensitive information like database credentials and environment variables in AWS Secrets Manager.
+   - Update the ECS task definition to retrieve secrets at runtime.
+
+4. **Monitoring and Alerting**:
+   - Set up CloudWatch alarms for high CPU, memory usage, and ECS task failures.
+   - Use AWS SNS for real-time notifications.
+
+5. **Backups**:
+   - Enable automated RDS backups and snapshots for disaster recovery.
+   - Set up EFS lifecycle policies for data retention.
+
+6. **Custom Domain**:
+   - Use Route 53 to configure a custom domain for your MISP application.
+   - Point the domain to your ALB.
+
+7. **Test Load Handling**:
+   - Use tools like Apache Benchmark or Locust to test the application under load.
+
+8. **Apply Security Best Practices**:
+   - Restrict security groups to allow traffic only from trusted IP ranges.
+   - Enable IAM roles and policies for least-privilege access.
+
+---
 
 ### **Understanding Terraform**
 Terraform is an Infrastructure as Code (IaC) tool that allows you to define and manage your infrastructure using code. For this project, Terraform is used to provision all necessary AWS resources for deploying MISP, such as:
@@ -178,11 +218,6 @@ To enable CI/CD using GitHub Actions, uncomment and use the workflow file locate
 
 ---
 
-## **Architecture Diagram**
-
-Need to be added
-
----
 
 ## **Verifying Deployment**
 
@@ -255,6 +290,38 @@ Once you're done testing or deploying:
 
    - Ensure correct target group configuration.
    - Verify security group rules.
+
+---
+
+## **Security and Best Practices**
+
+1. **Use AWS Secrets Manager**:
+   - Store sensitive information such as database credentials and API keys securely.
+   - Update the ECS task definition to retrieve secrets at runtime.
+
+2. **Enable HTTPS**:
+   - Use AWS Certificate Manager (ACM) to create SSL certificates.
+   - Attach the certificate to your Application Load Balancer (ALB) for secure communication.
+
+3. **IAM Roles and Policies**:
+   - Use IAM roles with least-privilege access for ECS tasks and AWS services.
+   - Regularly review and update IAM policies to follow security best practices.
+
+4. **Network Security**:
+   - Restrict security group rules to allow traffic only from trusted IP ranges.
+   - Use private subnets for backend services like RDS and Redis.
+
+5. **Data Encryption**:
+   - Enable encryption for RDS, EFS, and ElastiCache (Redis) to protect data at rest.
+   - Use HTTPS to encrypt data in transit.
+
+6. **Monitoring and Alerts**:
+   - Set up CloudWatch alarms for high CPU, memory usage, and ECS task failures.
+   - Use AWS SNS to notify administrators of critical issues.
+
+7. **Regular Updates**:
+   - Keep the Docker image and MISP application updated with the latest security patches.
+   - Update Terraform modules and AWS SDKs regularly to avoid vulnerabilities.
 
 ---
 
